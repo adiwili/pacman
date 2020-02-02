@@ -79,7 +79,7 @@ void zakoncz(Pacman *pacman, bool wynik)
   
   button = gtk_button_new_with_label ("Quit");
   g_signal_connect(button, "clicked",  G_CALLBACK (zamknij_okno_info),Pakiet_Zakoncz);
-  gtk_grid_attach (GTK_GRID (grid), button, 0, 2, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 1, 1);
 
   gtk_widget_show_all (window);
 }
