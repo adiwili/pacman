@@ -1,0 +1,48 @@
+#title
+{
+    font-size: large;
+}
+#scianka
+{
+    background: #555555;
+}
+#pp
+{
+    /*margin: 10px;
+    border-radius: 50%;
+    background: #dfb709;*/
+    border-style: solid;
+    border-color: #000000;
+}
+#pusty
+{
+    background: #ffffff00;
+}
+#pacman
+{
+    /*border-radius: 50%;*/
+    border-radius: 80%;
+    background: #dfb709;
+}
+#pacman_pole
+{
+    /*padding-right: 3%;*/
+    background: #094ddf;
+}
+#duszek
+{
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    background: #094ddf;
+}
+#niektywny_duszek
+{
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    background: #8f8f8f;
+}
+#bonusik
+{
+    border-radius: 80%;
+    background: #b30808;
+}
