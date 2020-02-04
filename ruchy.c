@@ -86,7 +86,7 @@ void zakoncz(Pacman *pacman, bool wynik)
 
 void quit_zakoncz(GtkWidget *widget, gpointer *data)
 {
-  Pacman *pacman = (Pacman *)malloc(sizeof(Pacman));
+  Pacman *pacman = (Pacman *)data;
   pacman->kontynuuj = false;
   gtk_widget_show(pacman->Pakiet->window_prev);
   gtk_widget_destroy(pacman->Pakiet->window);
@@ -112,11 +112,12 @@ void zdobyty_punkt(Pacman *pacman)
 gboolean timer(gpointer *data)
 {
   Pacman *pacman = (Pacman *) data;
+  if(!pacman->kontynuuj)
+    return false;
+
   pacman->time ++;
   gtk_label_set_text (GTK_LABEL(pacman->time_show), liczba_na_slowo(pacman->time));
 
-  if(!pacman->kontynuuj)
-    return false;
   switch (pacman->kierunek)
   {
     case 1:
