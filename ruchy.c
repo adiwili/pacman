@@ -117,6 +117,70 @@ gboolean timer(gpointer *data)
 
   if(!pacman->kontynuuj)
     return false;
+  switch (pacman->kierunek)
+  {
+    case 1:
+    {
+      if(pacman->table[pacman->ty-1][pacman->tx])
+      {
+        pacman->ty--;
+        for(int i = 0 ; i < pacman->bottom; i++)
+        {
+          pacman->y--;
+          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
+          sleep(STOP);
+        }
+        zdobyty_punkt(pacman);
+      }
+      break;
+    }
+    case 2:
+    {
+      if(pacman->table[pacman->ty+1][pacman->tx])
+      {
+        pacman->ty++;
+        for(int i = 0 ; i < pacman->bottom; i ++)
+        {
+          pacman->y++;
+          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
+          sleep(STOP);
+        }
+        zdobyty_punkt(pacman);
+      }
+      break;
+    }
+    case 3:
+    {
+      if(pacman->table[pacman->ty][pacman->tx-1])
+      {
+        pacman->tx--;
+        for(int i = 0 ; i < pacman->left; i ++)
+        {
+          pacman->x--;
+          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
+          sleep(STOP);
+        }
+        zdobyty_punkt(pacman);
+      }
+      break;
+    }
+    case 4:
+    {
+      if(pacman->table[pacman->ty][pacman->tx+1])
+      {
+        pacman->tx++;
+        for(int i = 0 ; i < pacman->left; i ++)
+        {
+          pacman->x++;
+          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
+          sleep(STOP);
+        }
+        zdobyty_punkt(pacman);
+      }
+      break;
+    }
+  }
+  
 
   for(int i = 0 ; i < pacman->ile_duszkow ; i ++)
   {
@@ -277,119 +341,29 @@ gboolean ruch(GtkWidget *widget, GdkEventKey *event, gpointer *data)
   //g_print("%d %d     ", pacman->tx, pacman->ty);
     if (event->keyval == GDK_KEY_w)
     {
-        if(pacman->table[pacman->ty-1][pacman->tx])
-        {
-          pacman->ty--;
-          for(int i = 0 ; i < pacman->bottom; i++)
-          {
-            pacman->y--;
-            gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
-            sleep(STOP);
-          }
-          zdobyty_punkt(pacman);
-        }
+        pacman->kierunek = 1;
         //g_print("%d %d\n", pacman->tx, pacman->ty);
         ruchy = TRUE;
     }
     if (event->keyval == GDK_KEY_s)
     {
-      if(pacman->table[pacman->ty+1][pacman->tx])
-      {
-        pacman->ty++;
-        for(int i = 0 ; i < pacman->bottom; i ++)
-        {
-          pacman->y++;
-          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
-          sleep(STOP);
-        }
-        zdobyty_punkt(pacman);
-      }
+      
+      pacman->kierunek = 2;
       //g_print("%d %d\n", pacman->tx, pacman->ty);
         ruchy = TRUE;
     }
     if (event->keyval == GDK_KEY_a)
     {
-      if(pacman->table[pacman->ty][pacman->tx-1])
-      {
-        pacman->tx--;
-        for(int i = 0 ; i < pacman->left; i ++)
-        {
-          pacman->x--;
-          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
-          sleep(STOP);
-        }
-        zdobyty_punkt(pacman);
-      }
+      
+      pacman->kierunek = 3;
       //g_print("%d %d\n", pacman->tx, pacman->ty);
         ruchy = TRUE;
     }
     if (event->keyval == GDK_KEY_d)
     {
-      if(pacman->table[pacman->ty][pacman->tx+1])
-      {
-        pacman->tx++;
-        for(int i = 0 ; i < pacman->left; i ++)
-        {
-          pacman->x++;
-          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
-          sleep(STOP);
-        }
-        zdobyty_punkt(pacman);
-      }
+      pacman->kierunek = 4;
       //g_print("%d %d\n", pacman->tx, pacman->ty);
         ruchy = TRUE;
     }
-    for(int i = 0 ; i < pacman->ile_duszkow ; i++)
-    {
-      if(pacman->duszki[i].tx == pacman->tx && pacman->duszki[i].ty == pacman->ty)
-      {
-        if(pacman->duszki[i].zywy)
-        {
-          if(pacman->nietykalny)
-          {
-            pacman->duszki[i].zywy = false;
-            //g_print("Duszek is dead\n");
-            //gtk_widget_destroy(pacman->duszki[i].duszek);
-            gtk_widget_set_name(pacman->duszki[i].duszek, "nie ma etykiety");
-            pacman->pz += pacman->czas_bonusy;
-            gtk_label_set_text (GTK_LABEL(pacman->PZ), liczba_na_slowo(pacman->pz));            
-          }
-          else
-          {
-            //g_print("You are dead\n");
-            pacman->kontynuuj = false;
-            zakoncz(pacman,false);
-          }
-        }
-      }
-    }
-
-  if(pacman->bezpieczny != -1)
-  {
-    //g_print("%d %d _%d %d_ %d\n", pacman->time, pacman->bezpieczny, pacman->Bonusy[pacman->bezpieczny].x, pacman->Bonusy[pacman->bezpieczny].y, pacman->Bonusy[pacman->bezpieczny].ile_aktywny);
-    if(pacman->tx == pacman->Bonusy[pacman->bezpieczny].x && pacman->ty == pacman->Bonusy[pacman->bezpieczny].y)
-    {
-      pacman->pz += pacman->Bonusy[pacman->bezpieczny].ile_aktywny;
-      gtk_label_set_text (GTK_LABEL(pacman->PZ), liczba_na_slowo(pacman->pz));
-      pacman->Bonusy[pacman->bezpieczny].ile_aktywny = 0;
-      for(int i = 0 ; i < pacman->ile_duszkow ; i++)
-      {
-        //g_print("Duszek dead\n");
-        if(pacman->duszki[i].zywy)
-          gtk_widget_set_name(pacman->duszki[i].duszek, "niektywny_duszek");
-      }
-    }
-
-    if(pacman->Bonusy[pacman->bezpieczny].ile_aktywny == 0)
-    {
-      //gtk_widget_destroy(pacman->Bonusy[pacman->bezpieczny].bonusik);
-      if(pacman->table[pacman->Bonusy[pacman->bezpieczny].y][pacman->Bonusy[pacman->bezpieczny].x] == '2')
-        gtk_widget_set_name(pacman->pole_pp[pacman->Bonusy[pacman->bezpieczny].y][pacman->Bonusy[pacman->bezpieczny].x], "zdobyte_pp");
-      else
-        gtk_widget_set_name(pacman->pole_pp[pacman->Bonusy[pacman->bezpieczny].y][pacman->Bonusy[pacman->bezpieczny].x], "pp");
-      pacman->bezpieczny = -1;
-      pacman->nietykalny = pacman->czas_bonusy+2;
-    }
-  }
   return ruchy;
 }

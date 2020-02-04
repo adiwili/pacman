@@ -58,6 +58,7 @@ typedef struct pacman_wskazniki
   int bezpieczny;
   int nietykalny;
   bool kontynuuj;
+  int kierunek;
 }Pacman;
 
 #endif

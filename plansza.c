@@ -22,6 +22,7 @@ void uruchom_plansze(GtkWidget *widget, gpointer data)
   Level->button_wywolujacy = widget;
 
   Pacman *pacman = (Pacman *)malloc(sizeof(Pacman));
+  pacman->kierunek = -1;
   pacman->kontynuuj = true;
   pacman->time = 0;
   pacman->pp = 0;
@@ -356,7 +357,7 @@ void uruchom_plansze(GtkWidget *widget, gpointer data)
   }
 
   button = gtk_button_new_with_label ("Quit");
-  g_signal_connect (button, "clicked", G_CALLBACK (quit_zakoncz), pacman);
+  g_signal_connect (button, "clicked", G_CALLBACK (zamknij_okno), pacman);
   gtk_grid_attach (GTK_GRID (grid), button, 0, height+4, width, 1);
 
   gtk_widget_show_all (window);  
