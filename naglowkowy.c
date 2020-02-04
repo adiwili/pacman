@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-//functions-------------------------------------------
-
 void print_hello (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello_1 World\n");
@@ -60,25 +58,11 @@ char *sklej(char *nazwa,char *doklej)
   return nowa_nazwa;
 }
 
-//typedef-------------------------------------------
-
 typedef struct user
 {
   int id;
   const gchar *nick;
 }gamer;
-
-gamer* malloc_gamer(int x)
-{
-  return (gamer *)malloc(sizeof(gamer)*x);
-}
-
-void free_gamer(gamer *x)
-{
-  free(x);
-}
-
-//--------------------------------------------------------
 
 typedef struct poziom
 {
@@ -88,35 +72,11 @@ typedef struct poziom
   GtkWidget *button_wywolujacy;
 }level;
 
-level* malloc_level(int x)
-{
-  return (level *)malloc(sizeof(level)*x);
-}
-
-void free_level(level *x)
-{
-  free(x);
-}
-
-//--------------------------------------------------------
-
 typedef struct poziomy
 {
   int ile;
   level *Poziomy;
 }levele;
-
-levele* malloc_levele(int x)
-{
-  return (levele *)malloc(sizeof(levele)*x);
-}
-
-void free_levele(levele *x)
-{
-  free(x);
-}
-
-//--------------------------------------------------------
 
 typedef struct pakiet_do_zamkniecia
 {
@@ -124,18 +84,6 @@ typedef struct pakiet_do_zamkniecia
     GtkWidget *window_prev;
     gamer *Gamer;
 }pakiet;
-
-pakiet* malloc_pakiet(int x)
-{
-  return (pakiet *)malloc(sizeof(pakiet)*x);
-}
-
-void free_pakiet(pakiet *x)
-{
-  free(x);
-}
-
-//--------------------------------------------------------
 
 typedef struct pakiet_przyciskow
 {
@@ -147,62 +95,8 @@ typedef struct pakiet_przyciskow
   gamer *Gamer;
 }przyciski;
 
-przyciski* malloc_przyciski(int x)
-{
-  return (przyciski *)malloc(sizeof(przyciski)*x);
-}
-
-void free_przyciski(przyciski *x)
-{
-  free(x);
-}
-
-//--------------------------------------------------------
-
 typedef struct do_poziomu
 {
   levele *Levele;
   pakiet *Pakiet;
 }do_level;
-
-do_level* malloc_do_level(int x)
-{
-  return (do_level *)malloc(sizeof(do_level)*x);
-}
-
-void free_do_level(do_level *x)
-{
-  free(x);
-}
-
-//--------------------------------------------------------
-
-// struct m_typ 
-// {
-//   int pole;
-// };
-// typedef struct m_typ moj_typ;
-
-// moj_typ* inicjalizuj(void)
-// { 
-//   moj_typ *tmp = malloc(sizeof(moj_typ));
-//   tmp -> pole = 0;
-//   return tmp;
-// }
-
-// void operacja1(moj_typ *m)
-// {
-
-//   m->pole = 7;
-// }
-// void operacja2(moj_typ *m)
-// {
-
-//   m->pole = 77;
-// }
-
-
-// void skasuj(moj_typ *m) {
-
-//   free(m);
-// }

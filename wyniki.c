@@ -9,7 +9,7 @@ void przepisz_plik(char *dest, char *source)
   FILE *plik = fopen(dest, "w");
   FILE *pom = fopen(source, "r");
   char znak;
-  while((znak = getc(pom)) && znak != EOF)//szerokosc planszy;
+  while((znak = getc(pom)) && znak != EOF)
     fputc(znak,plik);
 
   fclose(plik);
@@ -18,8 +18,6 @@ void przepisz_plik(char *dest, char *source)
 
 void zmiana_w_punkty(int id, int wynik, int odjac)
 {
-  //printf("%d, %d\n", id, wynik);
-
   FILE *plik = fopen("gamers.txt", "r" );
   FILE *pom = fopen("pomocniczy.txt", "w" );
   int id_temp, wynik_temp;
@@ -28,24 +26,23 @@ void zmiana_w_punkty(int id, int wynik, int odjac)
   {
     if(znak == ':')
     {
-      putc(znak, pom);//dwukropek
+      putc(znak, pom);
       id_temp = 0;
       while((znak = getc(plik)) && znak != ';')
       {
-        putc(znak, pom);//przepisz id
+        putc(znak, pom);
         id_temp *= 10;
         id_temp += znak -'0';
       }
-      putc(znak, pom);//srednik
+      putc(znak, pom);
       while((znak = getc(plik)) && znak != '~')
       {
-        fputc(znak, pom);//przepisz nick
+        fputc(znak, pom);
       }
-      putc(znak, pom);//~
-      //printf("%d\n", id_temp);
+      putc(znak, pom);
       if(id == id_temp)
       {
-        wynik_temp = 0;//pobierz wynik
+        wynik_temp = 0;
         while((znak = getc(plik)) && znak != '|')
         {
           wynik_temp *= 10;
@@ -57,10 +54,10 @@ void zmiana_w_punkty(int id, int wynik, int odjac)
       {
         while((znak = getc(plik)) && znak != '|')
         {
-          putc(znak, pom);//przepisz wynik
+          putc(znak, pom);
         }
-        putc(znak, pom);//'|'
-        putc('\n', pom);//'\n'
+        putc(znak, pom);
+        putc('\n', pom);
       }
     }
   }
@@ -72,13 +69,8 @@ void zmiana_w_punkty(int id, int wynik, int odjac)
 
 void zapisz_wynik(int id, int wynik, char *nazwa)
 {
-  //printf("wyniki %d %d\n", id, wynik);
   char *doklej = "_wyniki.txt";
   char *nazwa_pliku = sklej(nazwa, doklej);
-  //printf("wyniki %s\n", nazwa_pliku);
-  //nazwa = (char *)realloc(nazwa,sizeof(char)*(x+y));
- // nazwa = strcat(nazwa, doklej);
-  //printf("%s", nazwa_pliku);
   int id_temp, wynik_temp;
   int odjac = 0;
   char znak;
@@ -88,7 +80,7 @@ void zapisz_wynik(int id, int wynik, char *nazwa)
   FILE *plik = fopen(nazwa_pliku, "r" );
   FILE *pom = fopen("pomocniczy.txt", "w" );
   
-  while((znak = getc(plik)) && znak != EOF)//szerokosc planszy;
+  while((znak = getc(plik)) && znak != EOF)
   {
     if(znak == ':')
     {
@@ -115,14 +107,12 @@ void zapisz_wynik(int id, int wynik, char *nazwa)
         }
       }
       fprintf(pom, ":%d;%d\n", id_temp, wynik_temp);
-      //printf(":%d;%d\n", id_temp, wynik_temp);
     }
   }
   if(nowy)
   {
     fprintf(pom, ":%d;%d\n", id, wynik);
     dopisz = true;
-    //printf(":%d;%d\n", id, wynik);
   }
   fclose(plik);
   fclose(pom);

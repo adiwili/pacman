@@ -12,18 +12,11 @@ void print_entry (GtkWidget *widget, gpointer data);
 char *liczba_na_slowo(int a);
 char *sklej(char *nazwa,char *doklej);
 
-//typedef-------------------------------------------
-
 typedef struct user
 {
   int id;
   const gchar *nick;
 }gamer;
-
-gamer *malloc_gamer(int x);
-void free_gamer(gamer *x);
-
-//--------------------------------------------------------
 
 typedef struct pakiet_do_zamkniecia
 {
@@ -31,11 +24,6 @@ typedef struct pakiet_do_zamkniecia
     GtkWidget *window_prev;
     gamer *Gamer;
 }pakiet;
-
-pakiet* malloc_pakiet(int x);
-void free_pakiet(pakiet *x);
-
-//--------------------------------------------------------
 
 typedef struct pakiet_przyciskow
 {

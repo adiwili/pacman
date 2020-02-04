@@ -8,8 +8,6 @@
 #include "wyniki.h"
 #include "plansza.h"
 
-#define STOP 0.5
-
 typedef struct pakiet_zakoncz_struct
 {
   Pacman *pacman;
@@ -20,8 +18,9 @@ void zamknij_okno_info(GtkWidget *widget, gpointer data)
 {
   pakiet_zakoncz *Pakiet_Zakoncz = (pakiet_zakoncz *) data;
   gtk_widget_show(Pakiet_Zakoncz->pacman->Pakiet->window_prev);
-  gtk_widget_destroy(Pakiet_Zakoncz->okienko_info);
+  gtk_widget_set_sensitive(Pakiet_Zakoncz->pacman->Pakiet->window, true);
   gtk_widget_destroy(Pakiet_Zakoncz->pacman->Pakiet->window);
+  gtk_widget_destroy(Pakiet_Zakoncz->okienko_info);
 }
 
 void zamknij_okno_info_otworz(GtkWidget *widget, gpointer data)
@@ -33,10 +32,8 @@ void zamknij_okno_info_otworz(GtkWidget *widget, gpointer data)
 
 void zakoncz(Pacman *pacman, bool wynik)
 {
-  //printf("zakoncz %d\n", pacman->pz);
   if(wynik)
   {
-    //printf("%d\n", pacman->pz);
     zapisz_wynik(pacman->Pakiet->Gamer->id,pacman->pz,pacman->Level->plik);
   }
 
@@ -45,7 +42,7 @@ void zakoncz(Pacman *pacman, bool wynik)
   GtkWidget *button;
   GtkWidget *label;
 
-  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);//gtk_application_window_new (app);
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   
   pakiet_zakoncz *Pakiet_Zakoncz = (pakiet_zakoncz *)malloc(sizeof(pakiet_zakoncz));
   Pakiet_Zakoncz->pacman = pacman;
@@ -140,12 +137,8 @@ gboolean timer(gpointer *data)
       if(pacman->table[pacman->ty-1][pacman->tx])
       {
         pacman->ty--;
-        for(int i = 0 ; i < pacman->bottom; i++)
-        {
-          pacman->y--;
-          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
-          sleep(STOP);
-        }
+        pacman->y -= pacman->bottom;
+        gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
         zdobyty_punkt(pacman);
       }
       break;
@@ -155,12 +148,8 @@ gboolean timer(gpointer *data)
       if(pacman->table[pacman->ty+1][pacman->tx])
       {
         pacman->ty++;
-        for(int i = 0 ; i < pacman->bottom; i ++)
-        {
-          pacman->y++;
-          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
-          sleep(STOP);
-        }
+        pacman->y += pacman->bottom;
+        gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
         zdobyty_punkt(pacman);
       }
       break;
@@ -170,12 +159,8 @@ gboolean timer(gpointer *data)
       if(pacman->table[pacman->ty][pacman->tx-1])
       {
         pacman->tx--;
-        for(int i = 0 ; i < pacman->left; i ++)
-        {
-          pacman->x--;
-          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
-          sleep(STOP);
-        }
+        pacman->x -= pacman->left;
+        gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
         zdobyty_punkt(pacman);
       }
       break;
@@ -185,22 +170,35 @@ gboolean timer(gpointer *data)
       if(pacman->table[pacman->ty][pacman->tx+1])
       {
         pacman->tx++;
-        for(int i = 0 ; i < pacman->left; i ++)
-        {
-          pacman->x++;
-          gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
-          sleep(STOP);
-        }
+        pacman->x += pacman->left;
+        gtk_fixed_move (GTK_FIXED(pacman->pole_pacmana), pacman->pacman,pacman->x, pacman->y);
         zdobyty_punkt(pacman);
       }
       break;
     }
   }
-  
 
   for(int i = 0 ; i < pacman->ile_duszkow ; i ++)
   {
-    //if(pacman->duszki[i].droga[pacman->duszki[i].i_droga] == 'l')
+    if(pacman->duszki[i].tx == pacman->tx && pacman->duszki[i].ty == pacman->ty)
+    {
+      if(pacman->duszki[i].zywy)
+      {
+        if(pacman->nietykalny)
+        {
+          pacman->duszki[i].zywy = false;
+          gtk_widget_set_name(pacman->duszki[i].duszek, "nie ma etykiety"); 
+          pacman->pz += pacman->czas_bonusy;
+          gtk_label_set_text (GTK_LABEL(pacman->PZ), liczba_na_slowo(pacman->pz));        
+        }
+        else
+        {
+          pacman->kontynuuj = false;
+          zakoncz(pacman,false);
+          break;
+        }
+      }
+    }
     if(pacman->duszki[i].zwrot == 0)
     {
       if(pacman->table[pacman->duszki[i].ty][pacman->duszki[i].tx-1])
@@ -265,14 +263,12 @@ gboolean timer(gpointer *data)
         if(pacman->nietykalny)
         {
           pacman->duszki[i].zywy = false;
-          //gtk_widget_destroy(pacman->duszki[i].duszek);
           gtk_widget_set_name(pacman->duszki[i].duszek, "nie ma etykiety"); 
           pacman->pz += pacman->czas_bonusy;
           gtk_label_set_text (GTK_LABEL(pacman->PZ), liczba_na_slowo(pacman->pz));        
         }
         else
         {
-          //g_print("You are dead\n");
           pacman->kontynuuj = false;
           zakoncz(pacman,false);
         }
@@ -282,7 +278,6 @@ gboolean timer(gpointer *data)
 
   if(pacman->bezpieczny != -1)
   {
-    //g_print("%d %d _%d %d_ %d\n", pacman->time, pacman->bezpieczny, pacman->Bonusy[pacman->bezpieczny].x, pacman->Bonusy[pacman->bezpieczny].y, pacman->Bonusy[pacman->bezpieczny].ile_aktywny);
     if(pacman->tx == pacman->Bonusy[pacman->bezpieczny].x && pacman->ty == pacman->Bonusy[pacman->bezpieczny].y)
     {
       pacman->pz += pacman->Bonusy[pacman->bezpieczny].ile_aktywny;
@@ -290,7 +285,6 @@ gboolean timer(gpointer *data)
       pacman->Bonusy[pacman->bezpieczny].ile_aktywny = 0;
       for(int i = 0 ; i < pacman->ile_duszkow ; i++)
       {
-        //g_print("Duszek dead\n");
         if(pacman->duszki[i].zywy)
           gtk_widget_set_name(pacman->duszki[i].duszek, "niektywny_duszek");
       }
@@ -299,7 +293,6 @@ gboolean timer(gpointer *data)
       pacman->Bonusy[pacman->bezpieczny].ile_aktywny--;
     if(pacman->Bonusy[pacman->bezpieczny].ile_aktywny == 0)
     {
-      //gtk_widget_destroy(pacman->Bonusy[pacman->bezpieczny].bonusik);
       if(pacman->table[pacman->Bonusy[pacman->bezpieczny].y][pacman->Bonusy[pacman->bezpieczny].x] == '2')
         gtk_widget_set_name(pacman->pole_pp[pacman->Bonusy[pacman->bezpieczny].y][pacman->Bonusy[pacman->bezpieczny].x], "zdobyte_pp");
       else
@@ -317,7 +310,6 @@ gboolean timer(gpointer *data)
       {
         pacman->bezpieczny = i;
         pacman->Bonusy[i].ile_aktywny = pacman->czas_bonusy;
-        //g_print("tutaj bonusik %d %d %d\n", pacman->Bonusy[i].x, pacman->Bonusy[i].y, pacman->czas_bonusy);
         gtk_widget_set_name(pacman->pole_pp[pacman->Bonusy[i].y][pacman->Bonusy[i].x], "bonusik");
         break;
       }
@@ -341,7 +333,7 @@ gboolean timer(gpointer *data)
   {
     pacman->nietykalny --;
   }
-  
+
   return pacman->kontynuuj;
 }
 
@@ -354,32 +346,26 @@ gboolean ruch(GtkWidget *widget, GdkEventKey *event, gpointer *data)
   if(!pacman->kontynuuj)
     return false;
 
-  //g_print("%d %d     ", pacman->tx, pacman->ty);
-    if (event->keyval == GDK_KEY_w)
-    {
-        pacman->kierunek = 1;
-        //g_print("%d %d\n", pacman->tx, pacman->ty);
-        ruchy = TRUE;
-    }
-    if (event->keyval == GDK_KEY_s)
-    {
-      
-      pacman->kierunek = 2;
-      //g_print("%d %d\n", pacman->tx, pacman->ty);
-        ruchy = TRUE;
-    }
-    if (event->keyval == GDK_KEY_a)
-    {
-      
-      pacman->kierunek = 3;
-      //g_print("%d %d\n", pacman->tx, pacman->ty);
-        ruchy = TRUE;
-    }
-    if (event->keyval == GDK_KEY_d)
-    {
-      pacman->kierunek = 4;
-      //g_print("%d %d\n", pacman->tx, pacman->ty);
-        ruchy = TRUE;
-    }
+  if (event->keyval == GDK_KEY_w)
+  {
+    pacman->kierunek = 1;
+    ruchy = TRUE;
+  }
+  if (event->keyval == GDK_KEY_s)
+  {
+    pacman->kierunek = 2;
+    ruchy = TRUE;
+  }
+  if (event->keyval == GDK_KEY_a)
+  {
+    pacman->kierunek = 3;
+    ruchy = TRUE;
+  }
+  if (event->keyval == GDK_KEY_d)
+  {
+    pacman->kierunek = 4;
+    ruchy = TRUE;
+  }
+
   return ruchy;
 }

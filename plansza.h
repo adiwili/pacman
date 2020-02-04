@@ -39,16 +39,16 @@ typedef struct pacman_wskazniki
   gamer *Gamer;
   GtkWidget *PZ;
   GtkWidget *PP;
-  GtkWidget *pole_pacmana;//fixed do pacmana
+  GtkWidget *pole_pacmana;
   GtkWidget *pacman;
-  GtkWidget ***pole_pp; //tablica labeli
+  GtkWidget ***pole_pp;
   GtkWidget *time_show;
-  int x,y; //pozycja na ekranie pacmana
-  int width,height; //szerokosc, wysokosc
-  int left,bottom; //ile w dol, ile w gore
-  int tx,ty; //'pozycja' pacmana w tablicy
+  int x,y;
+  int width,height;
+  int left,bottom;
+  int tx,ty;
   int pp, pz;
-  char **table; //tablica booli
+  char **table;
   int ile_duszkow;
   duszek *duszki;
   int time;

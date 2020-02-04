@@ -7,15 +7,14 @@
 
 void dopisz(gamer *Gamer)
 {
-  //g_print("\n%s\n", Gamer->nick);
   FILE *fp;
   if ((fp = fopen("gamers.txt", "a"))==NULL)
   {
         printf ("File error\n");
         exit(1);
   }
-  fprintf (fp, ":%d;%s~0|\n", Gamer->id, Gamer->nick); /* zapisz nasz łańcuch w pliku */
-  fclose (fp); /* zamknij plik */
+  fprintf (fp, ":%d;%s~0|\n", Gamer->id, Gamer->nick);
+  fclose (fp);
 }
 
 void log_in (GtkWidget *widget, gpointer data)
@@ -41,9 +40,8 @@ void log_in (GtkWidget *widget, gpointer data)
   }
     while((x = getc(gamers)) && x != EOF)
     {
-      if(x == ':')//nazwa uzytkownika w pliku :23;ada123~
+      if(x == ':')
       {
-        //numer uzytkownika
         id = 0;
         while((x = getc(gamers)) && x != ';')
         {
@@ -51,15 +49,13 @@ void log_in (GtkWidget *widget, gpointer data)
           id += x - '0';
         }
         int i = 0;
-        //sprawdzenie czy nazwa sie zgadza
         nowy = true;
         while((x = getc(gamers)) && x == entry_text[i])
         {
-          //printf("%c", x);
           i++;
         }
 
-        if(x == '~' && entry_text[i] == '\0')//w nazwie zapisanej '~' w entry_text '\0'
+        if(x == '~' && entry_text[i] == '\0')
         {
           nowy = false;
           break;
@@ -70,15 +66,12 @@ void log_in (GtkWidget *widget, gpointer data)
 
     if(nowy)
     {
-      //printf("ghallo");
       Przyciski->Gamer->id = id+1;
       Przyciski->Gamer->nick = entry_text;
-      //g_print("\n:%d;%s~0|", Przyciski->Gamer->id, Przyciski->Gamer->nick);
       dopisz(Przyciski->Gamer);
     }
     else
     {
-      //printf("%d %s\n", id, entry_text);
       Przyciski->Gamer->id = id;
       Przyciski->Gamer->nick = entry_text;
     }

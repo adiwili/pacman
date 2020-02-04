@@ -91,8 +91,6 @@ void uruchom_levele(GtkWidget *widget, gpointer data)
   g_signal_connect(button, "clicked", G_CALLBACK (zamknij_okno), Pakiet_wroc_do_menu);
   g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(otworz_poprzednie), Pakiet_wroc_do_menu);
   gtk_grid_attach (GTK_GRID (grid), button, 0, 5, 1, 1);
-
-//--------------------------------------------------------------
-
+  
   gtk_widget_show_all (window);
 }

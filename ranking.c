@@ -83,31 +83,23 @@ void znajdz_gamer_na_pozycje(int n, score *Rank)
 
 void przygotowanie_rankingu()
 {
-    // moj_typ *m;
-
-    // m = inicjalizuj();
-
-    // operacja1(m);
-
-    // zwolnij(m);
-    
-      score *Rank;
-      Rank = (score *)malloc(sizeof(score)*5);
-      for(int i = 0 ; i < 5 ; i ++)
-      {
-        Rank[i].id = -1;
-        Rank[i].score = -1;
-        Rank[i].nick = (char *)malloc(sizeof(char)*51);
-        Rank[i].nick[0] = '\0';
-        znajdz_gamer_na_pozycje(i,Rank);
-        if(Rank[i].id == -1)
-        {
-          Rank[i].nick[0] = '\0';
-          Rank[i].score = 0;
-        }
-      }
-      for(int i = 0 ; i < 5 ; i ++)
-        przepisz(Rank);
+  score *Rank;
+  Rank = (score *)malloc(sizeof(score)*5);
+  for(int i = 0 ; i < 5 ; i ++)
+  {
+    Rank[i].id = -1;
+    Rank[i].score = -1;
+    Rank[i].nick = (char *)malloc(sizeof(char)*51);
+    Rank[i].nick[0] = '\0';
+    znajdz_gamer_na_pozycje(i,Rank);
+    if(Rank[i].id == -1)
+    {
+      Rank[i].nick[0] = '\0';
+      Rank[i].score = 0;
+    }
+  }
+  for(int i = 0 ; i < 5 ; i ++)
+    przepisz(Rank);
 }
 
 void uruchom_ranking(GtkWidget *widget, gpointer data)

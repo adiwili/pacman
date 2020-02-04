@@ -49,15 +49,11 @@ void uruchom_plansze(GtkWidget *widget, gpointer data)
   }
   pacman->Level = Level;
 
-//tutaj cialo planszy----------------------------------------------------------
-  
   GtkWidget *window;
   GtkWidget *grid;
   GtkWidget *button;
   GtkWidget *label;
   GtkWidget *overlay;
-
-//operacja na pliku--------------------------------------------------------------
 
   int width, height,cykl_czas;
   char znak;
@@ -66,20 +62,20 @@ void uruchom_plansze(GtkWidget *widget, gpointer data)
   FILE *plik = fopen(nazwa_pliku, "r" );
 
   width = 0;
-  while((znak = getc(plik)) && znak != ';')//szerokosc planszy;
+  while((znak = getc(plik)) && znak != ';')
   {
     width *= 10;
     width += znak - '0';
   }
 
   height = 0;
-  while((znak = getc(plik)) && znak != '\n')// wysokosc planszy;
+  while((znak = getc(plik)) && znak != '\n')
   {
     height *= 10;
     height += znak - '0';
   }
 
-  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);//gtk_application_window_new (app);
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Pac-Man");
   gtk_window_set_default_size (GTK_WINDOW (window), width, height);
   gtk_window_set_resizable (GTK_WINDOW(window), FALSE);
@@ -99,35 +95,35 @@ void uruchom_plansze(GtkWidget *widget, gpointer data)
   gtk_container_add(GTK_CONTAINER(window), grid);
 
   width = 0;
-  while((znak = getc(plik)) && znak != ';')//szerokosc planszy;
+  while((znak = getc(plik)) && znak != ';')
   {
     width *= 10;
     width += znak - '0';
   }
 
   height = 0;
-  while((znak = getc(plik)) && znak != '\n')// wysokosc planszy;
+  while((znak = getc(plik)) && znak != '\n')
   {
     height *= 10;
     height += znak - '0';
   }
 
   char **tbl;
-  tbl = malloc(height * sizeof(char *));//tworzenie tablicy tablic dla pp
+  tbl = malloc(height * sizeof(char *));
   for(int i = 0 ; i < height; i++)
   {
     tbl[i] = malloc(width * sizeof(char));
   }
   
   GtkWidget ***pola;
-  pola = malloc(height * sizeof(GtkWidget *));//tworzenie tablicy tablic dla labeli
+  pola = malloc(height * sizeof(GtkWidget *));
   for(int i = 0 ; i < height; i++)
   {
     pola[i] = malloc(width * sizeof(GtkWidget*));
   }
 
   label = gtk_label_new(Level->name);
-  gtk_widget_set_name (label, "title");//tutaj bedzie char * z ktorym wgl uruchomimy ten program
+  gtk_widget_set_name (label, "title");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, width, 1);
   
   for(int i = 0 ; i < height ; i ++)
@@ -156,7 +152,7 @@ void uruchom_plansze(GtkWidget *widget, gpointer data)
         gtk_widget_set_name (pola[i][j], "zdobyte_pp");
       }
     }
-    znak = getc(plik);//'\n'
+    znak = getc(plik);
   }
   
   pacman->width = 0;
@@ -213,7 +209,7 @@ void uruchom_plansze(GtkWidget *widget, gpointer data)
     pacman->ile_duszkow += znak - '0';
   }
   pacman->duszki = (duszek *)malloc(sizeof(duszek)*pacman->ile_duszkow);
-  //g_print("%d\n", pacman->ile_duszkow);
+
   for(int i = 0 ; i < pacman->ile_duszkow ; i++)
   {
     pacman->duszki[i].duszek = gtk_label_new("");
@@ -229,18 +225,13 @@ void uruchom_plansze(GtkWidget *widget, gpointer data)
       pacman->duszki[i].tx *= 10;
       pacman->duszki[i].tx += znak - '0';
     }
-    //g_print("%d ", pacman->duszki[i].tx);
     pacman->duszki[i].ty = 0;
     while((znak = getc(plik)) && znak != '\n')
     {
       pacman->duszki[i].ty *= 10;
       pacman->duszki[i].ty += znak - '0';
     }
-    //g_print("%d\n", pacman->duszki[i].ty);
     pacman->duszki[i].i_droga = 1;
-    //znak = getc(plik);
-    //g_print("* koniec %c*", znak);
-   // g_print("%s;%d", pacman->duszki[i].droga, pacman->duszki[i].ty);
   }
     
   pacman->ile_bonusow = 0;
@@ -281,14 +272,10 @@ void uruchom_plansze(GtkWidget *widget, gpointer data)
           pacman->Bonusy[i].y += znak - '0';
     }
     pacman->Bonusy[i].ile_aktywny = 0;
-    //g_print("tutaj bonus %d %d %d %d %d\n", pacman->ile_bonusow, pacman->czas_bonusy, pacman->Bonusy[i].czas, pacman->Bonusy[i].x, pacman->Bonusy[i].y);
-    //g_print("tutaj bonus %d %d\n", pacman->Bonusy[i].x, pacman->Bonusy[i].y);
   }
 
   fclose( plik );
-  g_timeout_add(cykl_czas*100, (gpointer)(timer), pacman);//dodac czas do wczytania
-
- //-------------------------------------------------------------
+  g_timeout_add(cykl_czas*100, (gpointer)(timer), pacman);
 
   label = gtk_label_new("PZ:");
   gtk_grid_attach (GTK_GRID (grid), label, width-4, height+3, 1, 1);
@@ -308,8 +295,6 @@ void uruchom_plansze(GtkWidget *widget, gpointer data)
   gtk_grid_attach (GTK_GRID (grid), label, 1, height+3, 1, 1);
   pacman->time_show = label;
 
-  //-------------------------------------------------------------
-  
   overlay = gtk_overlay_new();
   gtk_widget_set_name (overlay, "pacman_pole");
   gtk_grid_attach (GTK_GRID (grid), overlay, 0, 0, width, height);
