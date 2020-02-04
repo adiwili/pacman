@@ -34,6 +34,7 @@ void uruchom_menu(GtkWidget *widget, gpointer data)
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Pac-Man");
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 500);
+  
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
   Pakiet_wroc_do_login->window = window;
@@ -61,6 +62,7 @@ void uruchom_menu(GtkWidget *widget, gpointer data)
 
   button = gtk_button_new_with_label ("Quit");
   g_signal_connect (button, "clicked", G_CALLBACK (zamknij_okno), Pakiet_wroc_do_login);
+  g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(otworz_poprzednie), Pakiet_wroc_do_login);
   gtk_grid_attach (GTK_GRID (grid), button, 0, 4, 1, 1);
 
   gtk_widget_show_all (window);

@@ -24,6 +24,13 @@ void zamknij_okno_info(GtkWidget *widget, gpointer data)
   gtk_widget_destroy(Pakiet_Zakoncz->pacman->Pakiet->window);
 }
 
+void zamknij_okno_info_otworz(GtkWidget *widget, gpointer data)
+{
+  pakiet_zakoncz *Pakiet_Zakoncz = (pakiet_zakoncz *) data;
+  gtk_widget_show(Pakiet_Zakoncz->pacman->Pakiet->window_prev);
+  gtk_widget_destroy(Pakiet_Zakoncz->pacman->Pakiet->window);
+}
+
 void zakoncz(Pacman *pacman, bool wynik)
 {
   //printf("zakoncz %d\n", pacman->pz);
@@ -55,6 +62,7 @@ void zakoncz(Pacman *pacman, bool wynik)
   
   gtk_window_set_default_size (GTK_WINDOW (window), 200, 100);
   gtk_container_set_border_width (GTK_CONTAINER (window), 15);
+  g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(zamknij_okno_info_otworz), Pakiet_Zakoncz);
 
   gtk_widget_set_sensitive (window, true);
   gtk_widget_set_sensitive(pacman->Pakiet->window, false);
@@ -90,6 +98,13 @@ void quit_zakoncz(GtkWidget *widget, gpointer *data)
   pacman->kontynuuj = false;
   gtk_widget_show(pacman->Pakiet->window_prev);
   gtk_widget_destroy(pacman->Pakiet->window);
+}
+
+void quit_zakoncz_otworz(GtkWidget *widget, gpointer *data)
+{
+  Pacman *pacman = (Pacman *)data;
+  pacman->kontynuuj = false;
+  gtk_widget_show(pacman->Pakiet->window_prev);
 }
 
 void zdobyty_punkt(Pacman *pacman)

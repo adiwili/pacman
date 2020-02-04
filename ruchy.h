@@ -13,6 +13,8 @@
 void zdobyty_punkt(Pacman *pacman);
 void zakoncz(Pacman *pacman, bool wynik);
 void quit_zakoncz(GtkWidget *widget, gpointer *data);
+void quit_zakoncz_otworz(GtkWidget *widget, gpointer *data);
+
 gboolean timer(gpointer *data);
 gboolean ruch(GtkWidget *widget, GdkEventKey *event, gpointer *data);
 

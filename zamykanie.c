@@ -11,3 +11,9 @@ void zamknij_okno(GtkWidget *widget, gpointer data)
     gtk_widget_show(Pakiet->window_prev);
     gtk_widget_destroy(Pakiet->window);
 }
+
+void otworz_poprzednie(GtkWidget *widget, gpointer data)
+{
+    pakiet *Pakiet = (pakiet *) data;
+    gtk_widget_show(Pakiet->window_prev);
+}

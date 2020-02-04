@@ -9,4 +9,6 @@
 #include "naglowkowy.h"
 
 void zamknij_okno(GtkWidget *widget, gpointer data);
+void otworz_poprzednie(GtkWidget *widget, gpointer data);
+
 #endif
